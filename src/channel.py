@@ -21,15 +21,21 @@ class Channel:
         self._channel_id = channel_id
 
     @property
+    def channel(self):
+        """Возвращает название канала."""
+        return youtube.channels()
+
+
+    @property
     def title(self):
         """Возвращает название канала."""
-        channel = youtube.channels().list(id=self._channel_id, part='snippet').execute()
+        channel = self.channel.list(id=self._channel_id, part='snippet').execute()
         return channel['items'][0]['snippet']['title']
 
     @property
     def video_count(self):
         """Возвращает количество видео на канале."""
-        channel = youtube.channels().list(id=self._channel_id, part='statistics').execute()
+        channel = self.channel.list(id=self._channel_id, part='statistics').execute()
         return int(channel['items'][0]['statistics']['videoCount'])
 
     @property
@@ -54,7 +60,7 @@ class Channel:
 
     def print_info(self):
         """Выводит в консоль информацию о канале."""
-        channel = youtube.channels().list(id=self._channel_id, part='snippet,statistics').execute()
+        channel = self.channel.list(id=self._channel_id, part='snippet,statistics').execute()
         print(f"Название канала: {channel['items'][0]['snippet']['title']}")
         print(f"Количество видео: {int(channel['items'][0]['statistics']['videoCount'])}")
         print(f"Ссылка на канал: https://www.youtube.com/channel/{self._channel_id}")
